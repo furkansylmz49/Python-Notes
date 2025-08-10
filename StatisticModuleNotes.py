@@ -1,135 +1,113 @@
-import statistics 
+"""
+statistics_modul_rehberi.py
 
-def input_data():
+Bu dosya, Python statistics modülündeki fonksiyonların her birini tanıtır ve örneklerle açıklar.
+"""
 
-  while(True):
-    
-    data_str = input("Lütfen verileri aralarında birer boşluk bırakarak giriniz.").split()
-  
-    try:
-      data_int = list(map(int,data_str))
-      
-      if len(data_int) == 0:
-        print("Empty list is not allowed. Try again.")
-      else:
-        return data_int
-      
-    except ValueError:
-      print("Invalid input! Please enter integers only.")
+import statistics
+
+def explain_mean():
+    """mean(data): Verilen sayısal veri kümesinin aritmetik ortalamasını döndürür."""
+    data = [10, 20, 30, 40, 50]
+    result = statistics.mean(data)
+    print("mean([10, 20, 30, 40, 50]) ->", result, "# 30")
 
 
-
-def calculate_basic_stats(data):
-  statistic = dict()
-  
-  statistic["mean"] = statistics.mean(data)
-  statistic["median"] = statistics.median(data)
-  statistic["variance"] = statistics.variance(data)
-  statistic["stdev"] = statistics.stdev(data)
-  
-  try:
-    statistic["mode"] = statistics.mode(data)
-  except statistics.StatisticsError:
-    statistic["mode"] = "No unique mode"
+def explain_median():
+    """median(data): Verilen sayıların medyanını (ortanca) döndürür."""
+    data_even = [1, 2, 3, 4]
+    data_odd = [1, 2, 3]
+    print("median([1,2,3,4]) ->", statistics.median(data_even), "# (2 + 3) / 2 = 2.5")
+    print("median([1,2,3]) ->", statistics.median(data_odd), "# 2")
 
 
-  return statistic
+def explain_median_low():
+    """median_low(data): Veri çift sayıda ise küçük ortancayı döndürür."""
+    data = [1, 2, 3, 4]
+    print("median_low([1,2,3,4]) ->", statistics.median_low(data), "# 2")
 
 
-
-def calculate_z_scores(data, mean, stdev):
-  if stdev == 0:
-      print("Standard deviation is zero, z-score cannot be calculated.")
-      return []
-
-  z_score = list()
-  
-  for i in range(len(data)):
-      z_score.append((data[i] - mean) / stdev)
-
-  return z_score
+def explain_median_high():
+    """median_high(data): Veri çift sayıda ise büyük ortancayı döndürür."""
+    data = [1, 2, 3, 4]
+    print("median_high([1,2,3,4]) ->", statistics.median_high(data), "# 3")
 
 
-
-def main_menu():
-  while True:
-      print("\n--- Main Menu ---")
-      print("1. Enter data")
-      print("2. Calculate basic statistics")
-      print("3. Calculate z-scores")
-      print("0. Exit")
-    
-      global choice
-      choice = input("Choose an option: ")
-
-      if choice == "1":
-          print("Data entry selected.\n")
-          break
-
-      elif choice == "2":
-          print("Basic statistics selected.\n")
-          break
-
-      elif choice == "3":
-          print("Z-scores selected.\n")
-          break
-
-      elif choice == "0":
-          print("Exiting program. Goodbye!\n")
-          break
-      else:
-          print("Invalid choice, please try again.\n")
+def explain_median_grouped():
+    """median_grouped(data, interval): Grup içerisinden yaklaşık medyanı döndürür."""
+    data = [1, 2, 2, 3, 4, 5, 5, 5]
+    print("median_grouped([1,2,2,3,4,5,5,5]) ->",
+          statistics.median_grouped(data), "# yaklaşık medyan")
 
 
-
-print("Veri Analizi Uygulamasına Hoşgeldiniz.\n")
-data = []
-
-while(True):
-  main_menu()
-
-  if choice == "1":
-    data = input_data()
-    print("İşlem tamamlanmıştır ana menüye yönlendiriliyorsunuz.\n")
-
-  
-  elif choice == "2":
-    if data == []:
-      print("Lütfen veri girişi yapınız. Ana menüye yönlendiriliyorsunuz.\n")
-      
-    else:
-      statistic = calculate_basic_stats(data)
-      
-      for x,y in statistic.items():
-        print(f"{x} -> {y}")
-
-      print("İşlem tamamlanmıştır ana menüye yönlendiriliyorsunuz.\n")
+def explain_mode():
+    """mode(data): Tekil mod değerini döndürür; birden fazla mod varsa istatistik hatası."""
+    data_single = [1, 2, 2, 3]
+    print("mode([1,2,2,3]) ->", statistics.mode(data_single), "# 2")
 
 
-  elif choice == "3":
-    if data == []:
-      print("Lütfen veri girişi yapınız. Ana menüye yönlendiriliyorsunuz.\n")
-
-    else:
-      stats = calculate_basic_stats(data)
-      z_score = calculate_z_scores(data, stats["mean"], stats["stdev"])
+def explain_multiple_modes():
+    """multimode(data): Birden fazla mod varsa, hepsini liste olarak döndürür."""
+    data_multi = [1, 2, 2, 3, 3]
+    print("multimode([1,2,2,3,3]) ->", statistics.multimode(data_multi), "# [2, 3]")
 
 
-      print("Positive z-scores:")
-      for i, x in enumerate(z_score):
-          if x >= 0:
-              print(f"Index: {i} , Z-score: {x:.3f}")
-
-      print("\nNegative z-scores:")
-      for i, x in enumerate(z_score):
-          if x < 0:
-              print(f"Index: {i} , Z-score: {x:.3f}")
-            
-      print("İşlem tamamlanmıştır ana menüye yönlendiriliyorsunuz.\n")
+def explain_variance():
+    """variance(data): Örneklem varyansını (sample variance) döndürür."""
+    data = [1, 2, 3, 4, 5]
+    print("variance([1,2,3,4,5]) ->", statistics.variance(data), "# 2.5")
 
 
-  elif choice == "0":
-    break
+def explain_pvariance():
+    """pvariance(data): Tümdistribisyon varyansı (population variance) döndürür."""
+    data = [1, 2, 3, 4, 5]
+    print("pvariance([1,2,3,4,5]) ->", statistics.pvariance(data), "# 2.0")
+
+
+def explain_stdev():
+    """stdev(data): Örneklem standart sapmasını (sample standard deviation) döndürür."""
+    data = [1, 2, 3, 4, 5]
+    print("stdev([1,2,3,4,5]) ->", statistics.stdev(data), "# ~1.5811")
+
+
+def explain_pstdev():
+    """pstdev(data): Tümdistribisyon standart sapmasını (population std dev) döndürür."""
+    data = [1, 2, 3, 4, 5]
+    print("pstdev([1,2,3,4,5]) ->", statistics.pstdev(data), "# ~1.4142")
+
+
+def explain_harmonic_mean():
+    """harmonic_mean(data): Harmonik ortalama hesaplar."""
+    data = [1, 2, 4]
+    print("harmonic_mean([1,2,4]) ->", statistics.harmonic_mean(data), "# ~1.7143")
+
+
+def explain_geometric_mean():
+    """geometric_mean(data): Geometrik ortalama hesaplar."""
+    data = [1, 2, 4]
+    print("geometric_mean([1,2,4]) ->", statistics.geometric_mean(data), "# ~2.0")
+
+
+def explain_all():
+    """Tüm fonksiyonları ve örneklerini çalıştırır."""
+    explain_mean()
+    explain_median()
+    explain_median_low()
+    explain_median_high()
+    explain_median_grouped()
+    explain_mode()
+    explain_multiple_modes()
+    explain_variance()
+    explain_pvariance()
+    explain_stdev()
+    explain_pstdev()
+    explain_harmonic_mean()
+    explain_geometric_mean()
+
+
+if __name__ == "__main__":
+    explain_all()
+
         
         
 
